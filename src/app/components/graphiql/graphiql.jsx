@@ -43,7 +43,8 @@ export default () => {
             onEditVariables: PropTypes.func,
             onEditOperationName: PropTypes.func,
             onToggleDocs: PropTypes.func,
-            getDefaultFieldNames: PropTypes.func
+            getDefaultFieldNames: PropTypes.func,
+            runQuery: PropTypes.func
         }
 
         componentDidMount() {
@@ -77,6 +78,10 @@ export default () => {
                                 this.editorBarComponent = n;
                             }}
                             className="editorBar"
+                            onKeyDown={(e)=>{
+                                if (e.keyCode == 13 && e.ctrlKey)
+                                    this.props.runQuery()
+                            }}
                             onMouseDown={this.handleResizeStart}>
                             <div className="queryWrap">
                                 <QueryEditor

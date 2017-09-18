@@ -359,6 +359,7 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
                                         response={activeTab.getIn(['historyQuery', 'response']) || ''}
                                         variables={activeTab.getIn(['query', 'variables']) || ''}
                                         isWaitingForResponse={activeTab.get('loading')}
+                                        runQuery={this.runQuery}
                                     />
                                 ) : (
                                     <div className="Workspace__Empty">
@@ -528,6 +529,12 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
 
             const headers = applyVariablesToHeaders(environmentVariables, mergedHeaders)
 
+            var variables = query.get('variables');
+            try {
+                variables = JSON.parse(variables);
+            } catch (e) {
+
+            }
             const response = await queries.fetchQuery({
                 url: activeEnvironment.get('url'),
                 method: activeEnvironment.get('queryMethod'),
@@ -535,7 +542,7 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
                 params: {
                     query: query.get('query'),
                     operationName: query.get('operationName'),
-                    variables: query.get('variables')
+                    variables: variables
                 }
             })
 
@@ -877,7 +884,7 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
                 operationType: query.get('operationType'),
                 operationName: query.get('operationName'),
                 query: query.get('query'),
-                variables: query.get('variables'),
+                variables: JSON.parse(query.get('variables')),
                 headers: query.get('headers')
             })
 
